@@ -764,7 +764,6 @@ public class JD2XX implements Runnable {
 			lib.append("libjd2xx.jnilib");
 
 		try {
-			System.err.println(lib.toString());
 			NativeUtils.loadLibraryFromJar(lib.toString());
 		} catch (IOException e) {
 			throw new UnsatisfiedLinkError(e.getMessage());
