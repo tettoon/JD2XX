@@ -728,6 +728,7 @@ public class JD2XX implements Runnable {
 	static {
 		String dataModel = System.getProperty("sun.arch.data.model");
 		String osName = System.getProperty("os.name").toLowerCase();;
+		String osArch = System.getProperty("os.arch").toLowerCase();
 
 		StringBuilder lib = new StringBuilder("/jni/");
 
@@ -740,6 +741,14 @@ public class JD2XX implements Runnable {
 		else
 			throw new UnsatisfiedLinkError("Loading JD2XX JNI: Unsupported operating system ("+osName+")");
 
+		if (osArch.contains("arm")) {
+			String abi = System.getProperty("sun.arch.abi");
+			if (abi.contains("hf")) {
+				lib.append("arm-hf/");
+			} else {
+				lib.append("arm-sf/");
+			}
+		} else
 		if (dataModel.equals("32"))
 			lib.append("x86_32/");
 		else if (dataModel.equals("64"))
@@ -755,6 +764,7 @@ public class JD2XX implements Runnable {
 			lib.append("libjd2xx.jnilib");
 
 		try {
+			System.err.println(lib.toString());
 			NativeUtils.loadLibraryFromJar(lib.toString());
 		} catch (IOException e) {
 			throw new UnsatisfiedLinkError(e.getMessage());

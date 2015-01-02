@@ -49,6 +49,21 @@ else ifeq ($(PLATFORM),Linux x86_64)
 	CFLAGS += -fPIC
 	LDFLAGS += -lrt
 	SHARED_LIB = libjd2xx.so
+#ARMv6
+else ifeq ($(PLATFORM),Linux armv6l)
+        JDK ?= /usr/lib/jvm/java-7-oracle/
+        JDK_HEADERS = $(JDK)/include/linux
+        FTDI = ../ftdi
+        OS = linux_arm
+        CFLAGS += -fPIC
+	HARDFLOAT=`readelf -a /usr/bin/readelf | grep armhf` 
+	ifeq ($(strip, $(HARDFLOAT)),)
+		ARCH="arm926-hf"
+	else 
+		ARCH="arm926"
+	endif 
+        LDFLAGS += -lrt
+        SHARED_LIB = libjd2xx.so
 #ARM7
 else ifeq ($(PLATFORM),Linux armv7l)
         JDK ?= /usr/lib/jvm/java-7-oracle/
